@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Uinify Studio - Clean iOS Dashboard</title>
+
+  <!-- Google Fonts: Inter / SF Pro style -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandBlue: 'var(--accent-color, #0d99ff)',
+            iosBgLight: '#f4f5f9',
+            iosBgDark: '#0a0a0c',
+            cardLight: '#ffffff',
+            cardDark: '#16161a',
+            subtleBorderLight: 'rgba(0, 0, 0, 0.06)',
+            subtleBorderDark: 'rgba(255, 255, 255, 0.08)',
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'sans-serif'],
+          },
+          boxShadow: {
+            'neu-light': '10px 10px 25px #e1e3e8, -10px -10px 25px #ffffff',
+            'neu-inset': 'inset 4px 4px 8px #d1d3d8, inset -4px -4px 8px #ffffff',
+            'glass-light': '0 20px 40px -15px rgba(0, 0, 0, 0.07)',
+            'glass-dark': '0 20px 50px -10px rgba(0, 0, 0, 0.7)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --ui-scale: 1;
+      --accent-color: #0d99ff;
+    }
+
+    body {
+      font-size: calc(14px * var(--ui-scale));
+    }
+
+    /* Custom Scrollbar hiding */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Glassmorphism Styles */
+    .glass-dock {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .dark .glass-dock {
+      background: rgba(22, 22, 26, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Neumorphic Soft Card */
+    .neu-card {
+      background: #ffffff;
+      box-shadow: 12px 12px 28px rgba(210, 215, 225, 0.5), -10px -10px 24px rgba(255, 255, 255, 0.9);
+    }
+    .dark .neu-card {
+      background: #16161a;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Smooth Animations */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-slide-up {
+      animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .accent-bg { background-color: var(--accent-color); }
+    .accent-text { color: var(--accent-color); }
+    .accent-border { border-color: var(--accent-color); }
+  </style>
+</head>
+<body class="bg-iosBgLight dark:bg-iosBgDark text-gray-900 dark:text-gray-100 min-h-screen pb-32 antialiased transition-colors duration-200">
+
+  <!-- TOP HEADER BAR -->
+  <header class="sticky top-0 z-30 bg-iosBgLight/80 dark:bg-iosBgDark/80 backdrop-blur-md border-b border-subtleBorderLight dark:border-subtleBorderDark px-4 py-3">
+    <div class="max-w-md md:max-w-3xl lg:max-w-5xl mx-auto flex items-center justify-between gap-3">
+      
+      <!-- Brand Logo & Workspace -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-black dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark p-1.5 flex items-center justify-center shadow-lg shadow-brandBlue/20 group relative overflow-hidden">
+          <div class="absolute inset-0 bg-brandBlue/20 blur-md rounded-2xl"></div>
+          <img src="14776.png" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full rounded-xl accent-bg flex items-center justify-center text-white font-black text-lg\'>U</div>'" class="w-full h-full object-contain relative z-10 filter drop-shadow-[0_0_8px_rgba(13,153,255,0.5)] transition-transform group-hover:scale-110" alt="Uinify Logo" />
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-black text-base tracking-tight leading-none text-gray-900 dark:text-white">Uinify Studio</h1>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brandBlue/10 accent-text">v0.4.5</span>
+          </div>
+          <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5" id="user-workspace-label">Hanszx's Workspace</p>
+        </div>
+      </div>
+
+      <!-- Global Search Bar (Hidden on tiny screens) -->
+      <div class="hidden sm:flex items-center flex-1 max-w-xs relative">
+        <svg class="w-4 h-4 absolute left-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="global-search-input" placeholder="Cari proyek, preset, atau tag..." oninput="handleGlobalSearch(this.value)" class="w-full pl-9 pr-3 py-1.5 text-xs rounded-full bg-white dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark focus:outline-none focus:ring-2 focus:ring-brandBlue text-gray-800 dark:text-gray-200" />
+      </div>
+
+      <!-- Actions Right -->
+      <div class="flex items-center gap-2">
+        <!-- User Profile Avatar -->
+        <button onclick="switchTab('settings')" class="w-9 h-9 rounded-full overflow-hidden border-2 border-white dark:border-gray-700 shadow-sm transition-transform active:scale-95" title="Buka Profil & Pengaturan">
+          <img id="header-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover" alt="User Profile" />
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="max-w-md md:max-w-3xl lg:max-w-5xl mx-auto px-4 pt-5">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: HOME (GREETINGS, STATS WIDGET, PRESETS CAROUSEL, RECENT PROJECTS) -->
+    <!-- ========================================================================= -->
+    <main id="tab-home" class="space-y-6 animate-slide-up">
+      
+      <!-- Greeting & Clean Stat Banner (Inspired by reference UI card) -->
+      <section class="neu-card rounded-3xl p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider" id="current-date-lbl">20 Oktober 2026</p>
+            <h2 class="text-xl font-extrabold text-gray-900 dark:text-white mt-0.5">Welcome Back, <span id="user-greeting-name">Hanszx</span> 👋</h2>
+          </div>
+          <button onclick="switchTab('settings')" class="w-10 h-10 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:accent-text transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <!-- Metric Mini Widget -->
+        <div class="p-4 rounded-2xl bg-iosBgLight dark:bg-black/40 border border-subtleBorderLight dark:border-subtleBorderDark flex items-center justify-between">
+          <div class="space-y-1">
+            <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Storage Terpakai</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-2xl font-black text-gray-900 dark:text-white" id="home-storage-val">18.4 <span class="text-sm font-normal text-gray-500">MB</span></span>
+              <span class="text-xs font-semibold text-emerald-500">Normal (3.6%)</span>
+            </div>
+          </div>
+          <button onclick="triggerQuickBackup()" class="px-3.5 py-2 rounded-xl accent-bg text-white font-bold text-xs shadow-md hover:brightness-110 active:scale-95 transition-all">
+            Cadangkan Data
+          </button>
+        </div>
+      </section>
+
+      <!-- SECTION: FEATURED PRESETS -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Preset Kanvas Populer</h3>
+          <button onclick="switchTab('presets')" class="text-xs font-semibold accent-text hover:underline">Lihat Semua &rarr;</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3" id="featured-presets-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- SECTION: RECENT PROJECTS -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h3 class="text-base font-extrabold text-gray-900 dark:text-white">Proyek Terakhir</h3>
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" id="project-count-badge">0</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="toggleProjectViewMode()" id="btn-toggle-view" class="p-1.5 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" title="Ubah Tampilan Grid / List">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Projects Container -->
+        <div id="recent-projects-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: PRESETS CATALOG (WITH IMPORT PRESET) -->
+    <!-- ========================================================================= -->
+    <main id="tab-presets" class="hidden space-y-5 animate-slide-up">
+      <div class="neu-card p-5 rounded-3xl space-y-3">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Katalog Preset Kanvas</h2>
+            <p class="text-xs text-gray-500">Pilih template dimensi atau impor file preset (.json) kustom Anda.</p>
+          </div>
+          <button onclick="document.getElementById('import-preset-input').click()" class="px-4 py-2 rounded-full accent-bg text-white font-bold text-xs flex items-center gap-2 shadow-md hover:brightness-110 active:scale-95 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            <span>Impor Custom Preset</span>
+          </button>
+          <input type="file" id="import-preset-input" class="hidden" accept=".json" onchange="handleImportPresetFile(event)" />
+        </div>
+
+        <!-- Search & Filter Tags -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-subtleBorderLight dark:border-subtleBorderDark">
+          <button onclick="filterPresets('all')" class="preset-tag-btn active px-3 py-1 rounded-full text-xs font-bold bg-brandBlue text-white" data-category="all">Semua</button>
+          <button onclick="filterPresets('Mobile')" class="preset-tag-btn px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300" data-category="Mobile">Mobile</button>
+          <button onclick="filterPresets('Desktop')" class="preset-tag-btn px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300" data-category="Desktop">Desktop</button>
+          <button onclick="filterPresets('Tablet')" class="preset-tag-btn px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300" data-category="Tablet">Tablet</button>
+          <button onclick="filterPresets('Social')" class="preset-tag-btn px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300" data-category="Social">Social Media</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5" id="all-presets-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: PENGATURAN / SETTINGS (8 DETAILED SECTIONS) -->
+    <!-- ========================================================================= -->
+    <main id="tab-settings" class="hidden space-y-6 animate-slide-up">
+      
+      <!-- 1. WORKSPACE & PROFIL -->
+      <section class="neu-card p-5 rounded-3xl space-y-4">
+        <h3 class="text-xs font-black accent-text uppercase tracking-wider">1. Workspace & Profil Pengguna</h3>
+        
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <div class="relative group cursor-pointer" onclick="changeAvatarDemo()">
+            <img id="settings-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="w-16 h-16 rounded-2xl object-cover border-2 border-brandBlue shadow-md" alt="Avatar" />
+            <div class="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity">Ubah</div>
+          </div>
+
+          <div class="flex-1 space-y-2 w-full">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-400 mb-1">Nama Tampilan</label>
+              <input type="text" id="setting-user-name" value="Muhammad Farhan Fadli (Hanszx)" onchange="updateProfileInfo()" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold" />
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-400 mb-1">Tipe Workspace</label>
+              <select id="setting-workspace-type" onchange="updateProfileInfo()" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold">
+                <option value="Personal Workspace">Personal Workspace</option>
+                <option value="Team Design Ops">Team Design Ops</option>
+                <option value="Enterprise Studio">Enterprise Studio</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. CANVAS & GRID DEFAULTS -->
+      <section class="neu-card p-5 rounded-3xl space-y-4">
+        <h3 class="text-xs font-black accent-text uppercase tracking-wider">2. Default Kanvas & Grid Overlay</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1">Resolusi Standar Baru</label>
+            <select id="setting-default-res" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold">
+              <option value="375x812">Mobile (375 × 812 px)</option>
+              <option value="1440x900">Desktop Web (1440 × 900 px)</option>
+              <option value="1080x1080">Square Card (1080 × 1080 px)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1">Tipe Grid Overlay</label>
+            <select id="setting-grid-type" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold">
+              <option value="dot">Dot Grid (Bintik)</option>
+              <option value="square">Square Grid (Kotak Line)</option>
+              <option value="isometric">Isometric Grid</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1">Ukuran Grid (px)</label>
+            <input type="number" id="setting-grid-size" value="20" min="5" max="100" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold" />
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl bg-iosBgLight dark:bg-black/40">
+            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Snap to Grid</span>
+            <input type="checkbox" id="setting-snap-grid" checked class="w-4 h-4 accent-brandBlue" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. STORAGE & BACKUP -->
+      <section class="neu-card p-5 rounded-3xl space-y-4">
+        <h3 class="text-xs font-black accent-text uppercase tracking-wider">3. Penyimpanan & Backup Data</h3>
+        
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs font-bold">
+            <span class="text-gray-500">Kapasitas Memory LocalStorage</span>
+            <span class="accent-text font-mono" id="storage-status-text">18.4 MB / 500 MB</span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-800 h-2.5 rounded-full overflow-hidden">
+            <div id="storage-progress-bar" class="accent-bg h-full w-[15%] transition-all"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <button onclick="exportProjectFile()" class="p-3 rounded-2xl bg-iosBgLight dark:bg-black/40 border border-subtleBorderLight dark:border-subtleBorderDark flex items-center gap-3 hover:border-brandBlue transition-all text-left">
+            <div class="w-8 h-8 rounded-xl accent-bg/15 accent-text flex items-center justify-center font-bold">↑</div>
+            <div>
+              <p class="text-xs font-bold text-gray-900 dark:text-white">Ekspor Seluruh Data Backup</p>
+              <p class="text-[10px] text-gray-500">Format .uify / .json</p>
+            </div>
+          </button>
+
+          <button onclick="document.getElementById('import-project-input').click()" class="p-3 rounded-2xl bg-iosBgLight dark:bg-black/40 border border-subtleBorderLight dark:border-subtleBorderDark flex items-center gap-3 hover:border-brandBlue transition-all text-left">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center font-bold">↓</div>
+            <div>
+              <p class="text-xs font-bold text-gray-900 dark:text-white">Impor Berkas Cadangan</p>
+              <p class="text-[10px] text-gray-500">Pulihkan proyek dari file</p>
+            </div>
+          </button>
+        </div>
+
+        <div class="pt-2 border-t border-subtleBorderLight dark:border-subtleBorderDark flex justify-end">
+          <button onclick="clearLocalStorageCache()" class="px-3.5 py-1.5 rounded-xl bg-rose-500/10 text-rose-500 font-bold text-xs hover:bg-rose-500 hover:text-white transition-all">
+            Bersihkan Cache Lokal
+          </button>
+        </div>
+      </section>
+
+      <!-- 4. EXPORT & QUALITY DEFAULTS -->
+      <section class="neu-card p-5 rounded-3xl space-y-4">
+        <h3 class="text-xs font-black accent-text uppercase tracking-wider">4. Standard Ekspor & Kualitas Render</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1">Default Format Ekspor</label>
+            <select id="setting-export-fmt" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold">
+              <option value="PNG">PNG (High Quality Image)</option>
+              <option value="SVG">SVG (Vector Source)</option>
+              <option value="HTML">HTML Single-File App</option>
+              <option value="JSON">JSON Design Tree</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1">Scale Multiplier</label>
+            <select id="setting-export-scale" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold">
+              <option value="1x">1x (Original Size)</option>
+              <option value="2x">2x (Retina HD)</option>
+              <option value="3x">3x (Ultra HD)</option>
+              <option value="4x">4x (Print Quality)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1">Kompresi Gambar (100% Max)</label>
+            <input type="range" id="setting-quality-range" min="50" max="100" value="95" oninput="document.getElementById('quality-val').textContent = this.value + '%'" class="w-full accent-brandBlue" />
+            <span class="text-[10px] font-mono font-bold text-gray-400" id="quality-val">95%</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. APPEARANCE & UI SCALING -->
+      <section class="neu-card p-5 rounded-3xl space-y-4">
+        <h3 class="text-xs font-black accent-text uppercase tracking-wider">5. Tampilan & UI Scaling</h3>
+        
+        <div class="space-y-3">
+          <!-- Theme Mode Switcher -->
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-2">Tema Aplikasi</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="setThemeMode('dark')" id="btn-theme-dark" class="p-3 rounded-2xl border-2 border-brandBlue bg-black text-white text-xs font-bold flex items-center justify-center gap-2">
+                <span>🌙 Dark AMOLED</span>
+              </button>
+              <button onclick="setThemeMode('light')" id="btn-theme-light" class="p-3 rounded-2xl border-2 border-transparent bg-white text-gray-900 text-xs font-bold flex items-center justify-center gap-2 shadow-sm">
+                <span>☀️ Light Neumorphic</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Palette Color Selector -->
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-2">Warna Aksen Utama</label>
+            <div class="flex items-center gap-3">
+              <button onclick="setAccentColor('#0d99ff')" class="w-8 h-8 rounded-full bg-[#0d99ff] border-2 border-white shadow-md"></button>
+              <button onclick="setAccentColor('#00d1b2')" class="w-8 h-8 rounded-full bg-[#00d1b2] border-2 border-white shadow-md"></button>
+              <button onclick="setAccentColor('#7038f4')" class="w-8 h-8 rounded-full bg-[#7038f4] border-2 border-white shadow-md"></button>
+              <button onclick="setAccentColor('#ffd166')" class="w-8 h-8 rounded-full bg-[#ffd166] border-2 border-white shadow-md"></button>
+              <button onclick="setAccentColor('#ff453a')" class="w-8 h-8 rounded-full bg-[#ff453a] border-2 border-white shadow-md"></button>
+            </div>
+          </div>
+
+          <!-- UI Scaling Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-gray-400 mb-1">
+              <span>Global UI Scaling</span>
+              <span id="ui-scale-lbl" class="accent-text font-mono">100%</span>
+            </div>
+            <input type="range" id="ui-scale-slider" min="75" max="150" value="100" oninput="changeUiScale(this.value)" class="w-full accent-brandBlue" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. PERFORMANCE & ENGINE -->
+      <section class="neu-card p-5 rounded-3xl space-y-4">
+        <h3 class="text-xs font-black accent-text uppercase tracking-wider">6. Performa & Canvas Engine</h3>
+        
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-gray-900 dark:text-white">Akselerasi Hardware WebGL</p>
+              <p class="text-[10px] text-gray-500">Meningkatkan kecepatan render GPU</p>
+            </div>
+            <input type="checkbox" id="setting-webgl-accel" checked class="w-4 h-4 accent-brandBlue" />
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-subtleBorderLight dark:border-subtleBorderDark">
+            <div>
+              <p class="text-xs font-bold text-gray-900 dark:text-white">Batas Undo / Redo Steps</p>
+              <p class="text-[10px] text-gray-500">Jumlah memori simpan riwayat perubahan</p>
+            </div>
+            <input type="number" value="40" min="10" max="100" class="w-16 px-2 py-1 text-xs text-center rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. KEYBOARD SHORTCUTS -->
+      <section class="neu-card p-5 rounded-3xl space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-black accent-text uppercase tracking-wider">7. Pintasan Keyboard</h3>
+          <button onclick="openShortcutsModal()" class="text-xs font-bold accent-text hover:underline">Lihat Semua &rarr;</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="p-2 rounded-xl bg-iosBgLight dark:bg-black/30 flex justify-between">
+            <span class="text-gray-500">Kanvas Baru</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-800 font-mono text-[10px]">Ctrl + N</kbd>
+          </div>
+          <div class="p-2 rounded-xl bg-iosBgLight dark:bg-black/30 flex justify-between">
+            <span class="text-gray-500">Pencarian</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-800 font-mono text-[10px]">Ctrl + K</kbd>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. RESET SETTINGS & SYSTEM INFO -->
+      <section class="neu-card p-5 rounded-3xl space-y-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-xl bg-black dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark p-1 flex items-center justify-center">
+            <img src="14776.png" class="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(13,153,255,0.4)]" alt="Uinify Logo" onerror="this.style.display='none'" />
+          </div>
+          <h3 class="text-xs font-black text-rose-500 uppercase tracking-wider">8. Reset & Informasi Sistem</h3>
+        </div>
+        <p class="text-xs text-gray-500">Uinify Studio Engine v0.4.5 Beta (Build 2026.11.03). Seluruh data tersimpan secara lokal di browser Anda.</p>
+        
+        <button onclick="openResetModal()" class="w-full py-2.5 rounded-2xl bg-rose-500/10 text-rose-500 font-bold text-xs hover:bg-rose-500 hover:text-white transition-all">
+          Kembalikan Pengaturan ke Default Pabrik
+        </button>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING BOTTOM NAVIGATION DOCK (EXACT MATCH WITH DESIGN REFERENCE) -->
+  <!-- ========================================================================= -->
+  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3">
+    <!-- Main Navigation Pill -->
+    <div class="glass-dock px-5 py-2.5 rounded-full flex items-center gap-6 shadow-2xl">
+      <!-- Tab Home -->
+      <button onclick="switchTab('home')" id="dock-btn-home" class="flex flex-col items-center gap-0.5 text-brandBlue transition-transform active:scale-95" title="Home">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="text-[9px] font-extrabold">Home</span>
+      </button>
+
+      <!-- Tab Presets -->
+      <button onclick="switchTab('presets')" id="dock-btn-presets" class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform active:scale-95" title="Presets">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span class="text-[9px] font-semibold">Presets</span>
+      </button>
+
+      <!-- Tab Settings -->
+      <button onclick="switchTab('settings')" id="dock-btn-settings" class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform active:scale-95" title="Pengaturan">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span class="text-[9px] font-semibold">Pengaturan</span>
+      </button>
+    </div>
+
+    <!-- Standalone Separated Floating FAB '+' Button -->
+    <button onclick="openNewCanvasModal()" class="w-12 h-12 rounded-full glass-dock bg-gray-900/90 dark:bg-cardDark text-white dark:text-white border border-subtleBorderLight dark:border-subtleBorderDark flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all" title="Kanvas Baru">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+    </button>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DYNAMIC POPUPS & DIALOG MODALS SHEET -->
+  <!-- ========================================================================= -->
+
+  <!-- 1. PROJECT DETAILS & CONFIGURATION POPUP -->
+  <div id="modal-project-details" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slide-up">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-gray-900 dark:text-white">Detail Proyek & Ekspor</h3>
+        <button onclick="closeModal('modal-project-details')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white font-bold">&times;</button>
+      </div>
+
+      <!-- Thumbnail Preview -->
+      <div class="h-36 rounded-2xl overflow-hidden relative border border-subtleBorderLight dark:border-subtleBorderDark">
+        <img id="modal-proj-thumb" src="" class="w-full h-full object-cover" alt="Preview" />
+        <div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/60 text-white font-mono text-[10px]" id="modal-proj-dim-badge">375 × 812</div>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-400 mb-1">Judul Proyek</label>
+          <input type="text" id="modal-proj-title-input" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Format Ekspor</label>
+            <select id="modal-proj-export-fmt" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-semibold">
+              <option value="HTML">HTML App (.html)</option>
+              <option value="SVG">Vector Graphic (.svg)</option>
+              <option value="JSON">UI Tree Data (.json)</option>
+              <option value="PNG">PNG Image (.png)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Ukuran File</label>
+            <input type="text" id="modal-proj-size-lbl" readonly class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-mono text-gray-400" value="1.2 MB" />
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-between gap-2 border-t border-subtleBorderLight dark:border-subtleBorderDark">
+        <button onclick="deleteCurrentProjectFromModal()" class="px-3.5 py-2 rounded-xl bg-rose-500/10 text-rose-500 font-bold text-xs hover:bg-rose-500 hover:text-white transition-all">
+          Hapus
+        </button>
+        
+        <div class="flex items-center gap-2">
+          <button onclick="duplicateCurrentProjectFromModal()" class="px-3.5 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold text-xs">
+            Duplikasi
+          </button>
+          <button onclick="launchEditorFromModal()" class="px-4 py-2 rounded-xl accent-bg text-white font-extrabold text-xs shadow-md">
+            Buka Editor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PRESET CONFIGURATION POPUP -->
+  <div id="modal-preset-config" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-slide-up">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-gray-900 dark:text-white" id="preset-modal-title">Konfigurasi Preset</h3>
+        <button onclick="closeModal('modal-preset-config')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Lebar (W)</label>
+            <input type="number" id="preset-modal-w" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Tinggi (H)</label>
+            <input type="number" id="preset-modal-h" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 mb-1">Orientasi Kanvas</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="setPresetOrientation('portrait')" id="btn-orient-portrait" class="py-2 rounded-xl border border-brandBlue bg-brandBlue/10 accent-text text-xs font-bold">Portrait 📱</button>
+            <button onclick="setPresetOrientation('landscape')" id="btn-orient-landscape" class="py-2 rounded-xl border border-subtleBorderLight dark:border-subtleBorderDark text-xs font-bold text-gray-500">Landscape 🖥️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end gap-2">
+        <button onclick="closeModal('modal-preset-config')" class="px-4 py-2 text-xs font-bold text-gray-400">Batal</button>
+        <button onclick="confirmCreateFromPreset()" class="px-5 py-2 rounded-full accent-bg text-white text-xs font-extrabold shadow-md">Buka Kanvas Baru</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. NEW CANVAS MODAL SHEET -->
+  <div id="modal-new-canvas" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-slide-up">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-xl bg-black p-1 flex items-center justify-center border border-white/10">
+            <img src="14776.png" class="w-full h-full object-contain" alt="Uinify Logo" onerror="this.style.display='none'" />
+          </div>
+          <h3 class="text-base font-extrabold text-gray-900 dark:text-white">Kanvas Baru</h3>
+        </div>
+        <button onclick="closeModal('modal-new-canvas')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white font-bold">&times;</button>
+      </div>
+
+      <form onsubmit="handleCreateNewCanvasSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-400 mb-1">Nama Proyek</label>
+          <input type="text" id="new-canvas-title" required placeholder="Design Systems App" class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Lebar (W)</label>
+            <input type="number" id="new-canvas-w" value="375" required class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Tinggi (H)</label>
+            <input type="number" id="new-canvas-h" value="812" required class="w-full px-3 py-2 text-xs rounded-xl bg-iosBgLight dark:bg-black/50 border border-subtleBorderLight dark:border-subtleBorderDark font-bold" />
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-new-canvas')" class="px-4 py-2 text-xs font-bold text-gray-400">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-full accent-bg text-white text-xs font-extrabold shadow-md">Buat Kanvas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. RESET CONFIRMATION MODAL -->
+  <div id="modal-reset-confirm" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-slide-up">
+      <h3 class="text-base font-extrabold text-rose-500">Konfirmasi Reset Pabrik</h3>
+      <p class="text-xs text-gray-500">Apakah Anda yakin ingin mengembalikan seluruh pengaturan ke standar pabrik? Tindakan ini tidak menghapus berkas proyek tersimpan.</p>
+      
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-reset-confirm')" class="px-4 py-2 text-xs font-bold text-gray-400">Batal</button>
+        <button onclick="confirmResetAllSettings()" class="px-4 py-2 rounded-xl bg-rose-500 text-white font-extrabold text-xs shadow-md">Ya, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SHORTCUTS MODAL -->
+  <div id="modal-shortcuts" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-cardDark border border-subtleBorderLight dark:border-subtleBorderDark w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-slide-up">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-gray-900 dark:text-white">Daftar Pintasan Keyboard</h3>
+        <button onclick="closeModal('modal-shortcuts')" class="text-gray-400 hover:text-gray-600 dark:hover:text-white font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-2 max-h-60 overflow-y-auto text-xs pr-1">
+        <div class="p-2 rounded-xl bg-iosBgLight dark:bg-black/30 flex justify-between"><span>Kanvas Baru</span><kbd class="font-mono font-bold">Ctrl + N</kbd></div>
+        <div class="p-2 rounded-xl bg-iosBgLight dark:bg-black/30 flex justify-between"><span>Pencarian Global</span><kbd class="font-mono font-bold">Ctrl + K</kbd></div>
+        <div class="p-2 rounded-xl bg-iosBgLight dark:bg-black/30 flex justify-between"><span>Ekspor Cadangan</span><kbd class="font-mono font-bold">Ctrl + E</kbd></div>
+        <div class="p-2 rounded-xl bg-iosBgLight dark:bg-black/30 flex justify-between"><span>Toggle Theme Dark/Light</span><kbd class="font-mono font-bold">Ctrl + Shift + L</kbd></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT STATE ENGINE -->
+  <!-- ========================================================================= -->
+  <script>
+    // State Data Storage
+    let projectsState = [
+      { id: 'proj-1', title: 'iOS UI Design Kit', w: 375, h: 812, date: 'Today', count: '62 Layers', size: '1.2 MB', fmt: 'HTML', img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=400&auto=format&fit=crop' },
+      { id: 'proj-2', title: 'Smart Watch OS Hub', w: 360, h: 360, date: '24 Oct 2026', count: '24 Layers', size: '520 KB', fmt: 'SVG', img: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=400&auto=format&fit=crop' },
+      { id: 'proj-3', title: 'Sports Analytics Web', w: 1440, h: 900, date: '23 Oct 2026', count: '120 Layers', size: '3.4 MB', fmt: 'HTML', img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400&auto=format&fit=crop' },
+      { id: 'proj-4', title: 'Neumorphic Dashboard', w: 1080, h: 1080, date: '20 Oct 2026', count: '45 Layers', size: '890 KB', fmt: 'PNG', img: 'https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=400&auto=format&fit=crop' }
+    ];
+
+    let presetsState = [
+      { id: 'p1', title: 'iPhone 16 Pro', w: 375, h: 812, category: 'Mobile', desc: 'iOS Mobile Canvas' },
+      { id: 'p2', title: 'Android Compact', w: 360, h: 640, category: 'Mobile', desc: 'Material You Canvas' },
+      { id: 'p3', title: 'Desktop Web 1440', w: 1440, h: 900, category: 'Desktop', desc: 'Standard Web Dashboard' },
+      { id: 'p4', title: 'iPad Air / Pro', w: 820, h: 1180, category: 'Tablet', desc: 'Tablet Reader UI' },
+      { id: 'p5', title: 'Social Post 1:1', w: 1080, h: 1080, category: 'Social', desc: 'Square Graphic Banner' }
+    ];
+
+    let activeProjectTarget = null;
+    let activePresetTarget = null;
+    let viewModeGrid = true;
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSavedSettings();
+      renderFeaturedPresets();
+      renderRecentProjects();
+      renderPresetsCatalog();
+    });
+
+    // ------------------------------------------------------------------------
+    // RENDER FUNCTIONS
+    // ------------------------------------------------------------------------
+    function renderFeaturedPresets() {
+      const grid = document.getElementById('featured-presets-grid');
+      const featured = presetsState.slice(0, 2);
+
+      grid.innerHTML = featured.map(p => `
+        <div onclick="openPresetConfigModal('${p.id}')" class="neu-card rounded-3xl p-4 cursor-pointer group hover:scale-[1.02] transition-transform flex flex-col justify-between h-48 relative overflow-hidden">
+          <div class="flex justify-between items-start z-10">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brandBlue/10 accent-text">${p.category}</span>
+            <span class="text-[10px] font-mono font-bold text-gray-400">${p.w} × ${p.h}</span>
+          </div>
+
+          <div class="z-10">
+            <h4 class="text-sm font-extrabold text-gray-900 dark:text-white group-hover:accent-text transition-colors">${p.title}</h4>
+            <p class="text-[11px] text-gray-500 mt-0.5">${p.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderRecentProjects() {
+      const container = document.getElementById('recent-projects-container');
+      document.getElementById('project-count-badge').textContent = projectsState.length;
+
+      if (viewModeGrid) {
+        container.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3";
+        container.innerHTML = projectsState.map(p => `
+          <div onclick="openProjectDetailsModal('${p.id}')" class="neu-card rounded-3xl p-3 cursor-pointer group hover:scale-[1.02] transition-transform space-y-2">
+            <div class="h-32 rounded-2xl overflow-hidden relative border border-subtleBorderLight dark:border-subtleBorderDark">
+              <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-black/60 text-white font-mono text-[9px]">${p.fmt}</div>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-gray-900 dark:text-white truncate group-hover:accent-text transition-colors">${p.title}</p>
+              <p class="text-[10px] text-gray-500 font-mono">${p.count} • ${p.size}</p>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.className = "flex flex-col gap-2";
+        container.innerHTML = projectsState.map(p => `
+          <div onclick="openProjectDetailsModal('${p.id}')" class="neu-card rounded-2xl p-3 cursor-pointer group flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src="${p.img}" class="w-10 h-10 rounded-xl object-cover" />
+              <div>
+                <p class="text-xs font-bold text-gray-900 dark:text-white group-hover:accent-text">${p.title}</p>
+                <p class="text-[10px] text-gray-500 font-mono">${p.w} × ${p.h} px • ${p.size}</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brandBlue/10 accent-text">${p.fmt}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderPresetsCatalog(categoryFilter = 'all') {
+      const grid = document.getElementById('all-presets-grid');
+      let filtered = presetsState;
+      if (categoryFilter !== 'all') {
+        filtered = presetsState.filter(p => p.category === categoryFilter);
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div onclick="openPresetConfigModal('${p.id}')" class="neu-card rounded-2xl p-4 cursor-pointer hover:border-brandBlue transition-all flex flex-col justify-between h-32">
+          <div class="flex justify-between items-start">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brandBlue/10 accent-text">${p.category}</span>
+            <span class="text-[10px] font-mono font-bold text-gray-400">${p.w} × ${p.h}</span>
+          </div>
+          <div>
+            <h4 class="text-xs font-extrabold text-gray-900 dark:text-white">${p.title}</h4>
+            <p class="text-[10px] text-gray-500">${p.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ------------------------------------------------------------------------
+    // TAB NAVIGATION
+    // ------------------------------------------------------------------------
+    function switchTab(tabName) {
+      document.getElementById('tab-home').classList.add('hidden');
+      document.getElementById('tab-presets').classList.add('hidden');
+      document.getElementById('tab-settings').classList.add('hidden');
+
+      document.getElementById('dock-btn-home').className = "flex flex-col items-center gap-0.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform active:scale-95";
+      document.getElementById('dock-btn-presets').className = "flex flex-col items-center gap-0.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform active:scale-95";
+      document.getElementById('dock-btn-settings').className = "flex flex-col items-center gap-0.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform active:scale-95";
+
+      if (tabName === 'home') {
+        document.getElementById('tab-home').classList.remove('hidden');
+        document.getElementById('dock-btn-home').className = "flex flex-col items-center gap-0.5 text-brandBlue transition-transform active:scale-95";
+      } else if (tabName === 'presets') {
+        document.getElementById('tab-presets').classList.remove('hidden');
+        document.getElementById('dock-btn-presets').className = "flex flex-col items-center gap-0.5 text-brandBlue transition-transform active:scale-95";
+      } else if (tabName === 'settings') {
+        document.getElementById('tab-settings').classList.remove('hidden');
+        document.getElementById('dock-btn-settings').className = "flex flex-col items-center gap-0.5 text-brandBlue transition-transform active:scale-95";
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // MODALS & DIALOG HANDLERS
+    // ------------------------------------------------------------------------
+    function openProjectDetailsModal(projId) {
+      const proj = projectsState.find(p => p.id === projId);
+      if (!proj) return;
+      activeProjectTarget = proj;
+
+      document.getElementById('modal-proj-thumb').src = proj.img;
+      document.getElementById('modal-proj-dim-badge').textContent = `${proj.w} × ${proj.h} px`;
+      document.getElementById('modal-proj-title-input').value = proj.title;
+      document.getElementById('modal-proj-export-fmt').value = proj.fmt || 'HTML';
+      document.getElementById('modal-proj-size-lbl').value = proj.size;
+
+      openModal('modal-project-details');
+    }
+
+    function launchEditorFromModal() {
+      if (activeProjectTarget) {
+        activeProjectTarget.title = document.getElementById('modal-proj-title-input').value;
+        activeProjectTarget.fmt = document.getElementById('modal-proj-export-fmt').value;
+        renderRecentProjects();
+        showToast(`Membuka Editor: "${activeProjectTarget.title}"...`);
+        closeModal('modal-project-details');
+      }
+    }
+
+    function duplicateCurrentProjectFromModal() {
+      if (!activeProjectTarget) return;
+      const dup = {
+        ...activeProjectTarget,
+        id: `proj-${Date.now()}`,
+        title: `${activeProjectTarget.title} (Copy)`,
+        date: 'Baru saja'
+      };
+      projectsState.unshift(dup);
+      renderRecentProjects();
+      showToast(`Proyek Diduplikasi: "${dup.title}"`);
+      closeModal('modal-project-details');
+    }
+
+    function deleteCurrentProjectFromModal() {
+      if (!activeProjectTarget) return;
+      projectsState = projectsState.filter(p => p.id !== activeProjectTarget.id);
+      renderRecentProjects();
+      showToast(`Proyek Dihapus.`);
+      closeModal('modal-project-details');
+    }
+
+    function openPresetConfigModal(presetId) {
+      const p = presetsState.find(item => item.id === presetId);
+      if (!p) return;
+      activePresetTarget = p;
+
+      document.getElementById('preset-modal-title').textContent = `Preset: ${p.title}`;
+      document.getElementById('preset-modal-w').value = p.w;
+      document.getElementById('preset-modal-h').value = p.h;
+
+      openModal('modal-preset-config');
+    }
+
+    function confirmCreateFromPreset() {
+      if (!activePresetTarget) return;
+      const w = parseInt(document.getElementById('preset-modal-w').value) || activePresetTarget.w;
+      const h = parseInt(document.getElementById('preset-modal-h').value) || activePresetTarget.h;
+
+      const newP = {
+        id: `proj-${Date.now()}`,
+        title: `${activePresetTarget.title} Project`,
+        w, h,
+        date: 'Baru saja',
+        count: '1 Layer',
+        size: '120 KB',
+        fmt: 'HTML',
+        img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop'
+      };
+
+      projectsState.unshift(newP);
+      renderRecentProjects();
+      showToast(`Kanvas Dibuat dari Preset (${w}×${h}px)`);
+      closeModal('modal-preset-config');
+    }
+
+    function setPresetOrientation(mode) {
+      const wInp = document.getElementById('preset-modal-w');
+      const hInp = document.getElementById('preset-modal-h');
+      let w = parseInt(wInp.value);
+      let h = parseInt(hInp.value);
+
+      if (mode === 'portrait' && w > h) {
+        wInp.value = h; hInp.value = w;
+      } else if (mode === 'landscape' && h > w) {
+        wInp.value = h; hInp.value = w;
+      }
+
+      document.getElementById('btn-orient-portrait').className = mode === 'portrait' ? 'py-2 rounded-xl border border-brandBlue bg-brandBlue/10 accent-text text-xs font-bold' : 'py-2 rounded-xl border border-subtleBorderLight dark:border-subtleBorderDark text-xs font-bold text-gray-500';
+      document.getElementById('btn-orient-landscape').className = mode === 'landscape' ? 'py-2 rounded-xl border border-brandBlue bg-brandBlue/10 accent-text text-xs font-bold' : 'py-2 rounded-xl border border-subtleBorderLight dark:border-subtleBorderDark text-xs font-bold text-gray-500';
+    }
+
+    function handleCreateNewCanvasSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('new-canvas-title').value;
+      const w = parseInt(document.getElementById('new-canvas-w').value) || 375;
+      const h = parseInt(document.getElementById('new-canvas-h').value) || 812;
+
+      const newP = {
+        id: `proj-${Date.now()}`,
+        title, w, h,
+        date: 'Baru saja',
+        count: '1 Layer',
+        size: '150 KB',
+        fmt: 'HTML',
+        img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop'
+      };
+
+      projectsState.unshift(newP);
+      renderRecentProjects();
+      showToast(`Kanvas Baru: "${title}"`);
+      closeModal('modal-new-canvas');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      document.getElementById(id).classList.add('flex');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+      document.getElementById(id).classList.remove('flex');
+    }
+
+    function openNewCanvasModal() { openModal('modal-new-canvas'); }
+    function openResetModal() { openModal('modal-reset-confirm'); }
+    function openShortcutsModal() { openModal('modal-shortcuts'); }
+
+    // ------------------------------------------------------------------------
+    // SETTINGS & STORAGE LOGIC
+    // ------------------------------------------------------------------------
+    function updateProfileInfo() {
+      const name = document.getElementById('setting-user-name').value;
+      const ws = document.getElementById('setting-workspace-type').value;
+
+      document.getElementById('user-greeting-name').textContent = name.split(' ')[0];
+      document.getElementById('user-workspace-label').textContent = `${name.split(' ')[0]}'s (${ws})`;
+      showToast('Profil Diperbarui');
+    }
+
+    function changeAvatarDemo() {
+      const avatars = [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop'
+      ];
+      const current = document.getElementById('header-avatar-img').src;
+      const next = avatars[(avatars.indexOf(current) + 1) % avatars.length];
+
+      document.getElementById('header-avatar-img').src = next;
+      document.getElementById('settings-avatar-preview').src = next;
+      showToast('Foto Profil Diganti');
+    }
+
+    function setThemeMode(mode) {
+      if (mode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('btn-theme-dark').className = "p-3 rounded-2xl border-2 border-brandBlue bg-black text-white text-xs font-bold flex items-center justify-center gap-2";
+        document.getElementById('btn-theme-light').className = "p-3 rounded-2xl border-2 border-transparent bg-white text-gray-900 text-xs font-bold flex items-center justify-center gap-2 shadow-sm";
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('btn-theme-light').className = "p-3 rounded-2xl border-2 border-brandBlue bg-white text-gray-900 text-xs font-bold flex items-center justify-center gap-2 shadow-sm";
+        document.getElementById('btn-theme-dark').className = "p-3 rounded-2xl border-2 border-transparent bg-black text-white text-xs font-bold flex items-center justify-center gap-2";
+      }
+      showToast(`Tema Berganti: ${mode.toUpperCase()}`);
+    }
+
+    function setAccentColor(hex) {
+      document.documentElement.style.setProperty('--accent-color', hex);
+      showToast(`Warna Aksen Diganti`);
+    }
+
+    function changeUiScale(val) {
+      document.documentElement.style.setProperty('--ui-scale', val / 100);
+      document.getElementById('ui-scale-lbl').textContent = `${val}%`;
+    }
+
+    function exportProjectFile() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectsState, null, 2));
+      const anchor = document.createElement('a');
+      anchor.setAttribute("href", dataStr);
+      anchor.setAttribute("download", `uinify_backup_${Date.now()}.uify`);
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      showToast('Cadangan Data (.uify) Diekspor!');
+    }
+
+    function handleImportPresetFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          presetsState.unshift({
+            id: `p-${Date.now()}`,
+            title: imported.title || file.name.replace('.json', ''),
+            w: imported.w || 375,
+            h: imported.h || 812,
+            category: imported.category || 'Custom',
+            desc: 'Custom Imported Preset'
+          });
+          renderPresetsCatalog();
+          showToast(`Preset Diterima: ${file.name}`);
+        } catch (err) {
+          showToast('Berkas JSON Tidak Valid!');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function triggerQuickBackup() { exportProjectFile(); }
+    function clearLocalStorageCache() { showToast('Cache Lokal Dibersihkan.'); }
+    function confirmResetAllSettings() {
+      closeModal('modal-reset-confirm');
+      setThemeMode('dark');
+      setAccentColor('#0d99ff');
+      changeUiScale(100);
+      showToast('Pengaturan Direset ke Default Pabrik');
+    }
+
+    function toggleProjectViewMode() {
+      viewModeGrid = !viewModeGrid;
+      renderRecentProjects();
+    }
+
+    function filterPresets(cat) {
+      document.querySelectorAll('.preset-tag-btn').forEach(btn => {
+        if (btn.dataset.category === cat) {
+          btn.className = "preset-tag-btn active px-3 py-1 rounded-full text-xs font-bold bg-brandBlue text-white";
+        } else {
+          btn.className = "preset-tag-btn px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300";
+        }
+      });
+      renderPresetsCatalog(cat);
+    }
+
+    function handleGlobalSearch(query) {
+      query = query.toLowerCase();
+      if (!query) {
+        renderRecentProjects();
+        renderPresetsCatalog();
+        return;
+      }
+
+      const filteredProjects = projectsState.filter(p => p.title.toLowerCase().includes(query));
+      const container = document.getElementById('recent-projects-container');
+      container.innerHTML = filteredProjects.map(p => `
+        <div onclick="openProjectDetailsModal('${p.id}')" class="neu-card rounded-2xl p-3 cursor-pointer flex items-center justify-between">
+          <p class="text-xs font-bold text-gray-900 dark:text-white">${p.title}</p>
+          <span class="text-[10px] font-mono accent-text">${p.w}x${p.h}</span>
+        </div>
+      `).join('');
+    }
+
+    function loadSavedSettings() {
+      const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('current-date-lbl').textContent = today;
+    }
+
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'px-4 py-2 rounded-full bg-black/80 dark:bg-white/90 text-white dark:text-black text-xs font-bold shadow-xl backdrop-blur-md animate-slide-up';
+      toast.textContent = msg;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 250);
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

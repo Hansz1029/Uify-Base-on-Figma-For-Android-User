@@ -1,0 +1,6 @@
+{
+  "name": "Uinify",
+  "description": "Figma UI3 Native Vector Design Studio & Infinite Canvas Editor dengan Auto-Save dan Multi-format Import/Export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
